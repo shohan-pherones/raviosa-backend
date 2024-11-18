@@ -1,21 +1,35 @@
 import { StatusCodes } from "http-status-codes";
+import { startSession } from "mongoose";
 import AppError from "../../errors/app.error";
 import { ICategory } from "./category.interface";
 import CategoryModel from "./category.model";
 
 const createCategory = async (categoryData: ICategory): Promise<ICategory> => {
-  const { name } = categoryData;
+  const session = await startSession();
 
-  const conflicted = (await getAllCategories()).filter(
-    (cat) => cat.name === name
-  );
+  try {
+    session.startTransaction();
 
-  if (conflicted.length > 0) {
-    throw new AppError(StatusCodes.CONFLICT, "Category already exists");
+    const { name } = categoryData;
+
+    const conflicted = (await getAllCategories()).filter(
+      (cat) => cat.name === name
+    );
+
+    if (conflicted.length > 0) {
+      throw new AppError(StatusCodes.CONFLICT, "Category already exists");
+    }
+
+    const category = await CategoryModel.create([categoryData], { session });
+
+    await session.commitTransaction();
+    return category[0];
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
   }
-
-  const category = await CategoryModel.create(categoryData);
-  return category;
 };
 
 const getSingleCategory = async (categoryId: string): Promise<ICategory> => {
@@ -37,27 +51,39 @@ const updateCategory = async (
   categoryId: string,
   updateData: Partial<ICategory>
 ): Promise<ICategory> => {
-  const { name } = updateData;
+  const session = await startSession();
 
-  const conflicted = (await getAllCategories()).filter(
-    (cat) => cat.name === name
-  );
+  try {
+    session.startTransaction();
 
-  if (conflicted.length > 0) {
-    throw new AppError(StatusCodes.CONFLICT, "Category already exists");
+    const { name } = updateData;
+
+    const conflicted = (await getAllCategories()).filter(
+      (cat) => cat.name === name
+    );
+
+    if (conflicted.length > 0) {
+      throw new AppError(StatusCodes.CONFLICT, "Category already exists");
+    }
+
+    const category = await CategoryModel.findByIdAndUpdate(
+      categoryId,
+      { $set: updateData },
+      { new: true, session }
+    );
+
+    if (!category) {
+      throw new AppError(StatusCodes.NOT_FOUND, "Category not found");
+    }
+
+    await session.commitTransaction();
+    return category;
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
   }
-
-  const category = await CategoryModel.findByIdAndUpdate(
-    categoryId,
-    { $set: updateData },
-    { new: true }
-  );
-
-  if (!category) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Category not found");
-  }
-
-  return category;
 };
 
 const deleteCategory = async (categoryId: string): Promise<void> => {
