@@ -23,7 +23,7 @@ const createCategory = async (categoryData: ICategory): Promise<ICategory> => {
     const category = await CategoryModel.create([categoryData], { session });
 
     await session.commitTransaction();
-    return category[0];
+    return category[0].populate("products");
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -33,7 +33,9 @@ const createCategory = async (categoryData: ICategory): Promise<ICategory> => {
 };
 
 const getSingleCategory = async (categoryId: string): Promise<ICategory> => {
-  const category = await CategoryModel.findById(categoryId);
+  const category = await CategoryModel.findById(categoryId).populate(
+    "products"
+  );
 
   if (!category) {
     throw new AppError(StatusCodes.NOT_FOUND, "Category not found");
@@ -43,7 +45,7 @@ const getSingleCategory = async (categoryId: string): Promise<ICategory> => {
 };
 
 const getAllCategories = async (): Promise<ICategory[]> => {
-  const categories = await CategoryModel.find();
+  const categories = await CategoryModel.find().populate("products");
   return categories;
 };
 
@@ -70,7 +72,7 @@ const updateCategory = async (
       categoryId,
       { $set: updateData },
       { new: true, session }
-    );
+    ).populate("products");
 
     if (!category) {
       throw new AppError(StatusCodes.NOT_FOUND, "Category not found");
