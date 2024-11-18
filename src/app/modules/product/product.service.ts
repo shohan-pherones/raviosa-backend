@@ -35,7 +35,7 @@ const createProduct = async (productData: IProduct): Promise<IProduct> => {
     );
 
     await session.commitTransaction();
-    return product[0].populate("categories");
+    return (await product[0].populate("categories")).toObject();
   } catch (error) {
     await session.abortTransaction();
     throw error;

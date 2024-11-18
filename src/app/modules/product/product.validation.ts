@@ -1,5 +1,5 @@
+import mongoose from "mongoose";
 import { z } from "zod";
-import { CategoryValidations } from "../category/category.validation";
 
 const createProductSchema = z.object({
   name: z.string().min(1, { message: "Product name is required." }),
@@ -12,7 +12,11 @@ const createProductSchema = z.object({
     .number()
     .int()
     .nonnegative({ message: "Stock must be a non-negative integer." }),
-  categories: z.array(CategoryValidations.createCategorySchema),
+  categories: z.array(
+    z.string().refine((id) => mongoose.Types.ObjectId.isValid(id), {
+      message: "Invalid category ID format",
+    })
+  ),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
@@ -24,7 +28,11 @@ const updateProductSchema = z
     images: z.array(z.string().url()).optional(),
     price: z.number().positive().optional(),
     stock: z.number().int().nonnegative().optional(),
-    categories: z.array(CategoryValidations.createCategorySchema).optional(),
+    categories: z.array(
+      z.string().refine((id) => mongoose.Types.ObjectId.isValid(id), {
+        message: "Invalid category ID format",
+      })
+    ),
     createdAt: z.date().optional(),
     updatedAt: z.date().optional(),
   })
