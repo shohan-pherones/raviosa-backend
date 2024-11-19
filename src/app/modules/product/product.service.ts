@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { startSession } from "mongoose";
 import AppError from "../../errors/app.error";
+import CategoryModel from "../category/category.model";
 import { IProduct } from "./product.interface";
 import ProductModel from "./product.model";
 
@@ -31,6 +32,12 @@ const createProduct = async (productData: IProduct): Promise<IProduct> => {
           images,
         },
       ],
+      { session }
+    );
+
+    await CategoryModel.updateMany(
+      { _id: { $in: categories } },
+      { $push: { products: product[0]._id } },
       { session }
     );
 
