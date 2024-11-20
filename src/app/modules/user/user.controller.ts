@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import config from "../../config/env";
-import { UserServices } from "./user.service";
 import AppError from "../../errors/app.error";
+import { UserServices } from "./user.service";
 
 const register = async (req: Request, res: Response): Promise<void> => {
   try {
