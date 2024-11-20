@@ -7,8 +7,8 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  image?: string;
-  address?: string;
+  image: string;
+  address: string;
   role: "user" | "admin";
   createdAt: Date;
   updatedAt: Date;

@@ -23,7 +23,7 @@ const createCategory = async (categoryData: ICategory): Promise<ICategory> => {
     const category = await CategoryModel.create([categoryData], { session });
 
     await session.commitTransaction();
-    return category[0].populate("products");
+    return category[0];
   } catch (error) {
     await session.abortTransaction();
     throw error;
