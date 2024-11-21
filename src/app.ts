@@ -11,10 +11,10 @@ import router from "./app/routes";
 const app: Application = express();
 
 app.use(express.json());
-app.use(helmet());
-app.use(cors());
-app.use(morgan("short"));
 app.use(cookieParser());
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+app.use(helmet());
+app.use(morgan("short"));
 
 app.use("/api/v1", router);
 

@@ -11,6 +11,8 @@ const register = async (req: Request, res: Response): Promise<void> => {
     res.cookie("refreshToken", refreshToken, {
       secure: config.node_env === "production",
       httpOnly: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24 * 365,
     });
 
     res
@@ -32,6 +34,8 @@ const login = async (req: Request, res: Response): Promise<void> => {
     res.cookie("refreshToken", refreshToken, {
       secure: config.node_env === "production",
       httpOnly: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24 * 365,
     });
 
     res
