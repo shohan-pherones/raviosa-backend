@@ -43,7 +43,7 @@ const register = async (userData: IUser) => {
     config.jwt_refresh_expires_in as string
   );
 
-  return { accessToken, refreshToken };
+  return { accessToken, refreshToken, user };
 };
 
 const login = async (email: string, password: string) => {
@@ -79,7 +79,7 @@ const login = async (email: string, password: string) => {
     config.jwt_refresh_expires_in as string
   );
 
-  return { accessToken, refreshToken };
+  return { accessToken, refreshToken, user };
 };
 
 const refreshToken = async (token: string) => {
@@ -109,7 +109,7 @@ const refreshToken = async (token: string) => {
 };
 
 const getAllUsers = async (): Promise<IUser[]> => {
-  const users = await UserModel.find({}, "-password");
+  const users = await UserModel.find();
 
   if (!users) {
     throw new AppError(StatusCodes.NOT_FOUND, "No user found");
@@ -119,7 +119,7 @@ const getAllUsers = async (): Promise<IUser[]> => {
 };
 
 const getAnUser = async (userId: string): Promise<IUser> => {
-  const user = await UserModel.findById(userId, "-password");
+  const user = await UserModel.findById(userId);
 
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, "User not found");
@@ -133,7 +133,7 @@ const updateAnUser = async (userId: string, userData: Partial<IUser>) => {
     userId,
     { $set: userData },
     { new: true }
-  ).select("-password");
+  );
 
   return updatedUser;
 };
