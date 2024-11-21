@@ -109,7 +109,7 @@ const refreshToken = async (token: string) => {
 };
 
 const getAllUsers = async (): Promise<IUser[]> => {
-  const users = await UserModel.find();
+  const users = await UserModel.find({}, "-password");
 
   if (!users) {
     throw new AppError(StatusCodes.NOT_FOUND, "No user found");
@@ -119,7 +119,7 @@ const getAllUsers = async (): Promise<IUser[]> => {
 };
 
 const getAnUser = async (userId: string): Promise<IUser> => {
-  const user = await UserModel.findById(userId);
+  const user = await UserModel.findById(userId, "-password");
 
   if (!user) {
     throw new AppError(StatusCodes.NOT_FOUND, "User not found");
@@ -133,7 +133,7 @@ const updateAnUser = async (userId: string, userData: Partial<IUser>) => {
     userId,
     { $set: userData },
     { new: true }
-  );
+  ).select("-password");
 
   return updatedUser;
 };
