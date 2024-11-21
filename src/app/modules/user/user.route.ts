@@ -29,8 +29,8 @@ router.post(
   validate(UserValidations.loginSchema),
   UserControllers.login
 );
-router.post(
-  "/refresh-token",
+router.get(
+  "/token/refresh",
   validate(UserValidations.refreshTokenSchema),
   UserControllers.refreshToken
 );
