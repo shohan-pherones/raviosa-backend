@@ -20,17 +20,17 @@ router.put(
   UserControllers.updateAnUser
 );
 router.post(
-  "/register",
+  "/auth/register",
   validate(UserValidations.registerSchema),
   UserControllers.register
 );
 router.post(
-  "/login",
+  "/auth/login",
   validate(UserValidations.loginSchema),
   UserControllers.login
 );
 router.get(
-  "/token/refresh",
+  "/auth/token/refresh",
   validate(UserValidations.refreshTokenSchema),
   UserControllers.refreshToken
 );
