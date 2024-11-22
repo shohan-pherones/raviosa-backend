@@ -28,7 +28,7 @@ const userSchema = z.object({
   address: z.string().min(1, { message: "Address is required." }),
 });
 
-export const createOrderSchema = z.object({
+const createOrderSchema = z.object({
   subtotal: z
     .number()
     .nonnegative({ message: "Subtotal must be a non-negative number." }),
@@ -47,6 +47,34 @@ export const createOrderSchema = z.object({
   user: userSchema,
 });
 
+const shippingDetailsSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Name is required." })
+    .max(100, { message: "Name cannot exceed 100 characters." }),
+  email: z.string().email({ message: "Invalid email format." }),
+  phone: z
+    .string()
+    .min(10, { message: "Phone number must have at least 10 digits." })
+    .max(15, { message: "Phone number cannot exceed 15 digits." }),
+  address: z
+    .string()
+    .min(1, { message: "Address is required." })
+    .max(250, { message: "Address cannot exceed 250 characters." }),
+  paymentMethod: z
+    .string()
+    .min(1, { message: "Payment method is required." })
+    .max(50, { message: "Payment method cannot exceed 50 characters." }),
+});
+
+const confirmOrderSchema = z.object({
+  shippingDetails: shippingDetailsSchema,
+  items: z
+    .array(orderItemSchema)
+    .nonempty({ message: "Order must have at least one item." }),
+});
+
 export const OrderValidations = {
   createOrderSchema,
+  confirmOrderSchema,
 };

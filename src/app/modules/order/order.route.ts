@@ -14,4 +14,17 @@ router.post(
   OrderControllers.createOrder
 );
 
+router.get(
+  "/preview-order",
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  OrderControllers.getSingleOrderForConfirm
+);
+
+router.put(
+  "/confirm-order/:orderId",
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  validate(OrderValidations.confirmOrderSchema),
+  OrderControllers.confirmOrder
+);
+
 export default router;

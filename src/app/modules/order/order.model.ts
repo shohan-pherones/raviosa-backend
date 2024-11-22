@@ -17,6 +17,27 @@ const OrderSchema: Schema = new Schema<IOrder>(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    status: {
+      type: String,
+      enum: [
+        "placed",
+        "confirmed",
+        "paid",
+        "processing",
+        "shipping",
+        "shipped",
+        "cancelled",
+      ],
+      required: true,
+      default: "placed",
+    },
+    shippingDetails: {
+      name: { type: String },
+      email: { type: String },
+      phone: { type: String },
+      address: { type: String },
+      paymentMethod: { type: String },
+    },
   },
   {
     timestamps: true,
