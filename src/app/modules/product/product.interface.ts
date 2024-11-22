@@ -5,7 +5,7 @@ export interface IProduct {
   _id: ObjectId;
   name: string;
   description: string;
-  images?: string[];
+  image: string;
   price: number;
   stock: number;
   categories: ICategory[];

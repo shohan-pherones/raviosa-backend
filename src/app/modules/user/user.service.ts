@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { StatusCodes } from "http-status-codes";
-import { JwtPayload } from "jsonwebtoken";
 import config from "../../config/env";
 import AppError from "../../errors/app.error";
 import { createToken, verifyToken } from "../../utils/jwt.util";
@@ -83,29 +82,41 @@ const login = async (email: string, password: string) => {
 };
 
 const refreshToken = async (token: string) => {
-  const { userId } = verifyToken(
-    token,
-    config.jwt_refresh_secret as string
-  ) as JwtPayload;
+  try {
+    const { userId } = verifyToken(token, config.jwt_refresh_secret as string);
 
-  const user = await UserModel.findById(userId);
+    if (!userId) {
+      throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid token payload");
+    }
 
-  if (!user) {
-    throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+    }
+
+    const jwtPayload = {
+      userId: user.id,
+      role: user.role,
+    };
+
+    const accessToken = createToken(
+      jwtPayload,
+      config.jwt_access_secret as string,
+      config.jwt_access_expires_in as string
+    );
+
+    return { accessToken, user };
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "Something went wrong during token refresh"
+    );
   }
-
-  const jwtPayload = {
-    userId: user.id,
-    role: user.role,
-  };
-
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string
-  );
-
-  return { accessToken };
 };
 
 const getAllUsers = async (): Promise<IUser[]> => {

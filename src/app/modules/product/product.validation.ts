@@ -6,7 +6,7 @@ const createProductSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Product description is required." }),
-  images: z.array(z.string().url()).optional(),
+  image: z.string().url(),
   price: z.number().positive({ message: "Price must be a positive number." }),
   stock: z
     .number()
@@ -25,7 +25,7 @@ const updateProductSchema = z
   .object({
     name: z.string().min(1).optional(),
     description: z.string().min(1).optional(),
-    images: z.array(z.string().url()).optional(),
+    image: z.string().url().optional(),
     price: z.number().positive().optional(),
     stock: z.number().int().nonnegative().optional(),
     categories: z.array(

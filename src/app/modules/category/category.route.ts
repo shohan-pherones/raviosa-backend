@@ -13,14 +13,18 @@ router.post(
   validate(CategoryValidations.createCategorySchema),
   CategoryControllers.createCategory
 );
+
 router.get("/", CategoryControllers.getAllCategories);
+
 router.get("/:categoryId", CategoryControllers.getSingleCategory);
+
 router.put(
   "/:categoryId",
   auth(USER_ROLE.admin),
   validate(CategoryValidations.createCategorySchema),
   CategoryControllers.updateCategory
 );
+
 router.delete(
   "/:categoryId",
   auth(USER_ROLE.admin),

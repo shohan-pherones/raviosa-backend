@@ -1,15 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AnyZodObject, ZodError } from "zod";
+import { AnyZodObject, ZodError, ZodString } from "zod";
 
-export const validate = (schema: AnyZodObject) => {
+export const validate = (schema: AnyZodObject | ZodString) => {
   return async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     try {
-      await schema.parseAsync({ ...req.body, ...req.cookies });
+      const refreshToken = req.headers["x-refresh-token"];
+
+      if (refreshToken) {
+        req.body = refreshToken;
+      }
+
+      await schema.parseAsync(req.body);
       next();
     } catch (error) {
       if (error instanceof ZodError) {

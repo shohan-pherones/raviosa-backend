@@ -11,7 +11,7 @@ const createProduct = async (productData: IProduct): Promise<IProduct> => {
   try {
     session.startTransaction();
 
-    const { name, description, price, stock, categories, images } = productData;
+    const { name, description, price, stock, categories, image } = productData;
 
     const conflicted = (await getAllProducts()).filter(
       (prod) => prod.name === name
@@ -29,7 +29,7 @@ const createProduct = async (productData: IProduct): Promise<IProduct> => {
           price,
           stock,
           categories,
-          images,
+          image,
         },
       ],
       { session }
@@ -75,7 +75,7 @@ const updateProduct = async (
   try {
     session.startTransaction();
 
-    const { name, description, price, stock, categories, images } = updateData;
+    const { name, description, price, stock, categories, image } = updateData;
 
     const conflicted = (await getAllProducts()).filter(
       (prod) => prod.name === name
@@ -88,7 +88,7 @@ const updateProduct = async (
     const updatedProduct = await ProductModel.findByIdAndUpdate(
       productId,
       {
-        $set: { name, description, price, stock, categories, images },
+        $set: { name, description, price, stock, categories, image },
       },
       { new: true, session }
     ).populate("categories");

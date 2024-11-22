@@ -49,9 +49,7 @@ const loginSchema = z.object({
     }),
 });
 
-const refreshTokenSchema = z.object({
-  refreshToken: z.string(),
-});
+const refreshTokenSchema = z.string();
 
 const updateUserSchema = z
   .object({

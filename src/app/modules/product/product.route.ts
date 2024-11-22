@@ -13,14 +13,18 @@ router.post(
   validate(ProductValidations.createProductSchema),
   ProductControllers.createProduct
 );
+
 router.get("/", ProductControllers.getAllProducts);
+
 router.get("/:productId", ProductControllers.getSingleProduct);
+
 router.put(
   "/:productId",
   auth(USER_ROLE.admin),
   validate(ProductValidations.updateProductSchema),
   ProductControllers.updateProduct
 );
+
 router.delete(
   "/:productId",
   auth(USER_ROLE.admin),

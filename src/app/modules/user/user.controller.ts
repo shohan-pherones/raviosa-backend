@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import config from "../../config/env";
 import AppError from "../../errors/app.error";
 import { UserServices } from "./user.service";
 
@@ -10,16 +9,12 @@ const register = async (req: Request, res: Response): Promise<void> => {
       req.body
     );
 
-    res.cookie("refreshToken", refreshToken, {
-      secure: config.node_env === "production",
-      httpOnly: true,
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 24 * 365,
+    res.status(StatusCodes.CREATED).json({
+      message: "User registered successfully",
+      accessToken,
+      refreshToken,
+      user,
     });
-
-    res
-      .status(StatusCodes.CREATED)
-      .json({ message: "User registered successfully", accessToken, user });
   } catch (error: any) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
   }
@@ -33,28 +28,31 @@ const login = async (req: Request, res: Response): Promise<void> => {
       password
     );
 
-    res.cookie("refreshToken", refreshToken, {
-      secure: config.node_env === "production",
-      httpOnly: true,
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 24 * 365,
+    res.status(StatusCodes.OK).json({
+      message: "User logged in successfully",
+      accessToken,
+      refreshToken,
+      user,
     });
-
-    res
-      .status(StatusCodes.OK)
-      .json({ message: "User logged in successfully", accessToken, user });
   } catch (error: any) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
   }
 };
 
 const refreshToken = async (req: Request, res: Response): Promise<void> => {
-  const { refreshToken } = req.cookies;
-  const { accessToken } = await UserServices.refreshToken(refreshToken);
+  try {
+    const refreshToken = req.headers["x-refresh-token"] as string;
+    const { accessToken, user } = await UserServices.refreshToken(refreshToken);
 
-  res
-    .status(StatusCodes.OK)
-    .json({ message: "Access token retrieved successfully", accessToken });
+    res.status(StatusCodes.OK).json({
+      message: "Access token retrieved successfully",
+      accessToken,
+      refreshToken,
+      user,
+    });
+  } catch (error: any) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+  }
 };
 
 const getAllUsers = async (req: Request, res: Response): Promise<void> => {
