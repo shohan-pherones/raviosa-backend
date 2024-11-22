@@ -10,6 +10,12 @@ const UserSchema: Schema = new Schema<IUser>(
     image: { type: String, required: true },
     address: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
+    orders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
   },
   {
     timestamps: true,

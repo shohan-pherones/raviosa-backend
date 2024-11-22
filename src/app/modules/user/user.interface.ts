@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { USER_ROLE } from "./user.constant";
+import { IOrder } from "../order/order.interface";
 
 export interface IUser {
   _id: ObjectId;
@@ -10,6 +11,7 @@ export interface IUser {
   image: string;
   address: string;
   role: "user" | "admin";
+  orders: IOrder[];
   createdAt: Date;
   updatedAt: Date;
 }

@@ -14,6 +14,12 @@ const ProductSchema: Schema = new Schema<IProduct>(
         ref: "Category",
       },
     ],
+    orders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
   },
   {
     timestamps: true,
