@@ -27,4 +27,10 @@ router.put(
   OrderControllers.confirmOrder
 );
 
+router.get(
+  "/my-orders",
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  OrderControllers.getOrdersByUserId
+);
+
 export default router;

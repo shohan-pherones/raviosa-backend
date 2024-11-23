@@ -85,6 +85,20 @@ const getSingleOrderForConfirm = async (userId: string): Promise<IOrder> => {
   return order;
 };
 
+const getOrdersByUserId = async (userId: string): Promise<IOrder[]> => {
+  const orders = await OrderModel.find({
+    user: userId,
+  })
+    .sort({ createdAt: -1 })
+    .populate("items");
+
+  if (!orders.length) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
+  }
+
+  return orders;
+};
+
 const confirmOrder = async (
   confirmOrderData: IConfirmOrderData,
   orderId: string
@@ -169,4 +183,5 @@ export const OrderServices = {
   createOrder,
   getSingleOrderForConfirm,
   confirmOrder,
+  getOrdersByUserId,
 };

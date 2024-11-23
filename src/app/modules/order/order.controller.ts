@@ -44,8 +44,25 @@ const confirmOrder = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const getOrdersByUserId = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { userId } = req.user;
+    const orders = await OrderServices.getOrdersByUserId(userId);
+
+    res
+      .status(StatusCodes.CREATED)
+      .json({ message: "Orders retrieved successfully", orders });
+  } catch (error: any) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+  }
+};
+
 export const OrderControllers = {
   createOrder,
   getSingleOrderForConfirm,
   confirmOrder,
+  getOrdersByUserId,
 };
