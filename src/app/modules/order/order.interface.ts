@@ -40,6 +40,12 @@ export interface IConfirmOrderData {
 
 export interface IOrderedItems {
   orderId: ObjectId;
+  orderCosts: {
+    subtotal: number;
+    shippingCost: number;
+    tax: number;
+    totalPrice: number;
+  };
   items: {
     product: ObjectId;
     quantity: number;

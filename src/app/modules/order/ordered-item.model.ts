@@ -7,6 +7,12 @@ const orderedItemsSchema = new Schema<IOrderedItems>({
     required: true,
     ref: "Order",
   },
+  orderCosts: {
+    subtotal: { type: Number, required: true },
+    shippingCost: { type: Number, required: true },
+    tax: { type: Number, required: true },
+    totalPrice: { type: Number, required: true },
+  },
   items: [
     {
       product: {

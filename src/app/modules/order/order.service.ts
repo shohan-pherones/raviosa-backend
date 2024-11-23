@@ -165,6 +165,12 @@ const confirmOrder = async (
       [
         {
           orderId: order._id,
+          orderCosts: {
+            subtotal: order.subtotal,
+            shippingCost: order.shippingCost,
+            tax: order.tax,
+            totalPrice: order.totalPrice,
+          },
           items: orderedItems,
         },
       ],
