@@ -37,3 +37,11 @@ export interface IConfirmOrderData {
   shippingDetails: IShippingDetails;
   items: IOrderItem[];
 }
+
+export interface IOrderedItems {
+  orderId: ObjectId;
+  items: {
+    product: ObjectId;
+    quantity: number;
+  }[];
+}

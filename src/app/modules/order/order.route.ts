@@ -41,4 +41,10 @@ router.put(
   OrderControllers.mutateOrderStatus
 );
 
+router.get(
+  "/order-details/:orderId",
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  OrderControllers.getOrderDetailsByOrderId
+);
+
 export default router;

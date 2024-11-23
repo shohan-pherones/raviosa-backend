@@ -3,8 +3,9 @@ import { startSession } from "mongoose";
 import AppError from "../../errors/app.error";
 import ProductModel from "../product/product.model";
 import UserModel from "../user/user.model";
-import { IConfirmOrderData, IOrder } from "./order.interface";
+import { IConfirmOrderData, IOrder, IOrderedItems } from "./order.interface";
 import OrderModel from "./order.model";
+import OrderedItemsModel from "./ordered-item.model";
 
 const createOrder = async (orderData: IOrder): Promise<IOrder> => {
   const session = await startSession();
@@ -133,6 +134,8 @@ const confirmOrder = async (
 
     const { shippingDetails, items } = confirmOrderData;
 
+    const orderedItems = [];
+
     for (const item of items) {
       const product = await ProductModel.findById(item._id).session(session);
 
@@ -151,7 +154,22 @@ const confirmOrder = async (
 
       product.stock -= item.quantity;
       await product.save({ session });
+
+      orderedItems.push({
+        product: product._id,
+        quantity: item.quantity,
+      });
     }
+
+    await OrderedItemsModel.create(
+      [
+        {
+          orderId: order._id,
+          items: orderedItems,
+        },
+      ],
+      { session }
+    );
 
     const updatedOrder = await OrderModel.findOneAndUpdate(
       { _id: orderId },
@@ -218,6 +236,22 @@ const mutateOrderStatus = async (
   return updatedOrder;
 };
 
+const getOrderDetailsByOrderId = async (
+  orderId: string
+): Promise<IOrderedItems> => {
+  const orderedItems = await OrderedItemsModel.findOne({
+    orderId,
+  })
+    .populate("items.product")
+    .exec();
+
+  if (!orderedItems) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Ordered items not found");
+  }
+
+  return orderedItems;
+};
+
 export const OrderServices = {
   createOrder,
   getSingleOrderForConfirm,
@@ -225,4 +259,5 @@ export const OrderServices = {
   getOrdersByUserId,
   getAllOrders,
   mutateOrderStatus,
+  getOrderDetailsByOrderId,
 };
