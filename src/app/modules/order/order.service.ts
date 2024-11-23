@@ -88,9 +88,17 @@ const getSingleOrderForConfirm = async (userId: string): Promise<IOrder> => {
 const getOrdersByUserId = async (userId: string): Promise<IOrder[]> => {
   const orders = await OrderModel.find({
     user: userId,
-  })
-    .sort({ createdAt: -1 })
-    .populate("items");
+  }).sort({ createdAt: -1 });
+
+  if (!orders.length) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
+  }
+
+  return orders;
+};
+
+const getAllOrders = async (): Promise<IOrder[]> => {
+  const orders = await OrderModel.find({}).sort({ createdAt: -1 });
 
   if (!orders.length) {
     throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
@@ -179,9 +187,42 @@ const confirmOrder = async (
   }
 };
 
+const mutateOrderStatus = async (
+  orderId: string,
+  status: string
+): Promise<IOrder> => {
+  if (
+    ![
+      "placed",
+      "confirmed",
+      "paid",
+      "processing",
+      "shipping",
+      "shipped",
+      "cancelled",
+    ].includes(status)
+  ) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid order status");
+  }
+
+  const updatedOrder = await OrderModel.findOneAndUpdate(
+    { _id: orderId },
+    { $set: { status } },
+    { new: true }
+  );
+
+  if (!updatedOrder) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Order not found");
+  }
+
+  return updatedOrder;
+};
+
 export const OrderServices = {
   createOrder,
   getSingleOrderForConfirm,
   confirmOrder,
   getOrdersByUserId,
+  getAllOrders,
+  mutateOrderStatus,
 };

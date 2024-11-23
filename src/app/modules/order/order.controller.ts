@@ -60,9 +60,39 @@ const getOrdersByUserId = async (
   }
 };
 
+const getAllOrders = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const orders = await OrderServices.getAllOrders();
+
+    res
+      .status(StatusCodes.CREATED)
+      .json({ message: "Orders retrieved successfully", orders });
+  } catch (error: any) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+  }
+};
+
+const mutateOrderStatus = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { orderId, status } = req.params;
+    const order = await OrderServices.mutateOrderStatus(orderId, status);
+
+    res
+      .status(StatusCodes.CREATED)
+      .json({ message: "Order status updated successfully", order });
+  } catch (error: any) {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+  }
+};
+
 export const OrderControllers = {
   createOrder,
   getSingleOrderForConfirm,
   confirmOrder,
   getOrdersByUserId,
+  getAllOrders,
+  mutateOrderStatus,
 };

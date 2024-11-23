@@ -33,4 +33,12 @@ router.get(
   OrderControllers.getOrdersByUserId
 );
 
+router.get("/all-orders", auth(USER_ROLE.admin), OrderControllers.getAllOrders);
+
+router.put(
+  "/manage/:status/:orderId",
+  auth(USER_ROLE.admin),
+  OrderControllers.mutateOrderStatus
+);
+
 export default router;
