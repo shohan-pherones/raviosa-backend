@@ -7,22 +7,22 @@ import UserRoutes from "../modules/user/user.route";
 const router: Router = express.Router();
 
 const moduleRoutes = [
-    {
-        path: "/users",
-        route: UserRoutes,
-    },
-    {
-        path: "/categories",
-        route: CategoryRoutes,
-    },
-    {
-        path: "/products",
-        route: ProductRoutes,
-    },
-    {
-        path: "/orders",
-        route: OrderRoutes,
-    },
+  {
+    path: "/users",
+    route: UserRoutes,
+  },
+  {
+    path: "/categories",
+    route: CategoryRoutes,
+  },
+  {
+    path: "/products",
+    route: ProductRoutes,
+  },
+  {
+    path: "/orders",
+    route: OrderRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

@@ -23,9 +23,7 @@ const orderItemSchema = productSchema.extend({
 const userSchema = zod_1.z.object({
     username: zod_1.z.string().min(1, { message: "Username is required." }),
     name: zod_1.z.string().min(1, { message: "User name is required." }),
-    email: zod_1.z
-        .string()
-        .email({ message: "Email must be a valid email address." }),
+    email: zod_1.z.string().email({ message: "Email must be a valid email address." }),
     image: zod_1.z.string().url({ message: "User image must be a valid URL." }),
     address: zod_1.z.string().min(1, { message: "Address is required." }),
 });

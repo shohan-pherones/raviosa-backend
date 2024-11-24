@@ -8,10 +8,10 @@ import { CategoryValidations } from "./category.validation";
 const router: Router = express.Router();
 
 router.post(
-    "/",
-    auth(USER_ROLE.admin),
-    validate(CategoryValidations.createCategorySchema),
-    CategoryControllers.createCategory
+  "/",
+  auth(USER_ROLE.admin),
+  validate(CategoryValidations.createCategorySchema),
+  CategoryControllers.createCategory
 );
 
 router.get("/", CategoryControllers.getAllCategories);
@@ -19,16 +19,16 @@ router.get("/", CategoryControllers.getAllCategories);
 router.get("/:categoryId", CategoryControllers.getSingleCategory);
 
 router.put(
-    "/:categoryId",
-    auth(USER_ROLE.admin),
-    validate(CategoryValidations.createCategorySchema),
-    CategoryControllers.updateCategory
+  "/:categoryId",
+  auth(USER_ROLE.admin),
+  validate(CategoryValidations.createCategorySchema),
+  CategoryControllers.updateCategory
 );
 
 router.delete(
-    "/:categoryId",
-    auth(USER_ROLE.admin),
-    CategoryControllers.deleteCategory
+  "/:categoryId",
+  auth(USER_ROLE.admin),
+  CategoryControllers.deleteCategory
 );
 
 export default router;
