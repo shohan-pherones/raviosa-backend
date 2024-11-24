@@ -3,11 +3,9 @@
   "builds": [
     {
       "src": "./dist/server.js",
-      "use": "@vercel/node",
-      "config": { "includeFiles": ["./dist/**"] }
+      "use": "@vercel/node"
     }
   ],
-  "buildCommand": "npm run build",
   "routes": [
     {
       "src": "/(.*)",
