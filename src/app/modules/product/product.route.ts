@@ -8,10 +8,10 @@ import { ProductValidations } from "./product.validation";
 const router: Router = express.Router();
 
 router.post(
-  "/",
-  auth(USER_ROLE.admin),
-  validate(ProductValidations.createProductSchema),
-  ProductControllers.createProduct
+    "/",
+    auth(USER_ROLE.admin),
+    validate(ProductValidations.createProductSchema),
+    ProductControllers.createProduct
 );
 
 router.get("/", ProductControllers.getAllProducts);
@@ -19,16 +19,16 @@ router.get("/", ProductControllers.getAllProducts);
 router.get("/:productId", ProductControllers.getSingleProduct);
 
 router.put(
-  "/:productId",
-  auth(USER_ROLE.admin),
-  validate(ProductValidations.updateProductSchema),
-  ProductControllers.updateProduct
+    "/:productId",
+    auth(USER_ROLE.admin),
+    validate(ProductValidations.updateProductSchema),
+    ProductControllers.updateProduct
 );
 
 router.delete(
-  "/:productId",
-  auth(USER_ROLE.admin),
-  ProductControllers.deleteProduct
+    "/:productId",
+    auth(USER_ROLE.admin),
+    ProductControllers.deleteProduct
 );
 
 export default router;

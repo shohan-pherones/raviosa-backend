@@ -6,8 +6,7 @@ class AppError extends Error {
         this.statusCode = statusCode;
         if (stack) {
             this.stack = stack;
-        }
-        else {
+        } else {
             Error.captureStackTrace(this, this.constructor);
         }
     }

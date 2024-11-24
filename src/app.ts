@@ -19,7 +19,7 @@ app.use(morgan("short"));
 app.use("/api/v1", router);
 
 app.get("/api/v1/health", (req: Request, res: Response) => {
-  res.status(StatusCodes.OK).json({ message: "Server is running healthy!" });
+    res.status(StatusCodes.OK).json({ message: "Server is running healthy!" });
 });
 
 app.use(notFoundHandler);

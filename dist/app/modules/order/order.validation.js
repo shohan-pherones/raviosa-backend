@@ -7,8 +7,12 @@ const productSchema = zod_1.z.object({
     description: zod_1.z
         .string()
         .min(1, { message: "Product description is required." }),
-    image: zod_1.z.string().url({ message: "Product image must be a valid URL." }),
-    price: zod_1.z.number().positive({ message: "Price must be a positive number." }),
+    image: zod_1.z
+        .string()
+        .url({ message: "Product image must be a valid URL." }),
+    price: zod_1.z
+        .number()
+        .positive({ message: "Price must be a positive number." }),
     stock: zod_1.z
         .number()
         .int()
@@ -23,7 +27,9 @@ const orderItemSchema = productSchema.extend({
 const userSchema = zod_1.z.object({
     username: zod_1.z.string().min(1, { message: "Username is required." }),
     name: zod_1.z.string().min(1, { message: "User name is required." }),
-    email: zod_1.z.string().email({ message: "Email must be a valid email address." }),
+    email: zod_1.z
+        .string()
+        .email({ message: "Email must be a valid email address." }),
     image: zod_1.z.string().url({ message: "User image must be a valid URL." }),
     address: zod_1.z.string().min(1, { message: "Address is required." }),
 });
@@ -33,7 +39,9 @@ const createOrderSchema = zod_1.z.object({
         .nonnegative({ message: "Subtotal must be a non-negative number." }),
     shippingCost: zod_1.z
         .number()
-        .nonnegative({ message: "Shipping cost must be a non-negative number." }),
+        .nonnegative({
+            message: "Shipping cost must be a non-negative number.",
+        }),
     tax: zod_1.z
         .number()
         .nonnegative({ message: "Tax must be a non-negative number." }),

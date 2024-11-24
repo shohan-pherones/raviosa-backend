@@ -28,5 +28,8 @@ const orderedItemsSchema = new mongoose_1.Schema({
         },
     ],
 });
-const OrderedItemsModel = (0, mongoose_1.model)("OrderedItems", orderedItemsSchema);
+const OrderedItemsModel = (0, mongoose_1.model)(
+    "OrderedItems",
+    orderedItemsSchema
+);
 exports.default = OrderedItemsModel;
