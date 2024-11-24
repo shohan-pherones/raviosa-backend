@@ -14,4 +14,5 @@ exports.default = {
     jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
     jwt_access_expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
     jwt_refresh_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
+    frontend_base_url: process.env.FRONTEND_BASE_URL,
 };
