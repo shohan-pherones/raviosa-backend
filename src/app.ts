@@ -7,12 +7,13 @@ import morgan from "morgan";
 import globalErrorHandler from "./app/errors/global.error";
 import notFoundHandler from "./app/errors/not-found.error";
 import router from "./app/routes";
+import env from "./app/config/env";
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: env.frontend_base_url, credentials: true }));
 app.use(helmet());
 app.use(morgan("short"));
 
