@@ -7,12 +7,8 @@ const productSchema = zod_1.z.object({
     description: zod_1.z
         .string()
         .min(1, { message: "Product description is required." }),
-    image: zod_1.z
-        .string()
-        .url({ message: "Product image must be a valid URL." }),
-    price: zod_1.z
-        .number()
-        .positive({ message: "Price must be a positive number." }),
+    image: zod_1.z.string().url({ message: "Product image must be a valid URL." }),
+    price: zod_1.z.number().positive({ message: "Price must be a positive number." }),
     stock: zod_1.z
         .number()
         .int()
@@ -37,11 +33,9 @@ const createOrderSchema = zod_1.z.object({
     subtotal: zod_1.z
         .number()
         .nonnegative({ message: "Subtotal must be a non-negative number." }),
-    shippingCost: zod_1.z
-        .number()
-        .nonnegative({
-            message: "Shipping cost must be a non-negative number.",
-        }),
+    shippingCost: zod_1.z.number().nonnegative({
+        message: "Shipping cost must be a non-negative number.",
+    }),
     tax: zod_1.z
         .number()
         .nonnegative({ message: "Tax must be a non-negative number." }),
