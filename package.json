@@ -5,7 +5,16 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "prepare": "husky install"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": ".husky/pre-commit"
+    }
   },
   "keywords": [],
   "author": "",
