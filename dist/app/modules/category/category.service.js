@@ -41,7 +41,13 @@ const createCategory = (categoryData) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 const getSingleCategory = (categoryId) => __awaiter(void 0, void 0, void 0, function* () {
-    const category = yield category_model_1.default.findById(categoryId).populate("products");
+    const category = yield category_model_1.default.findById(categoryId).populate({
+        path: "products",
+        populate: {
+            path: "categories",
+            model: "Category",
+        },
+    });
     if (!category) {
         throw new app_error_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Category not found");
     }
