@@ -18,6 +18,7 @@ const mongoose_1 = require("mongoose");
 const app_error_1 = __importDefault(require("../../errors/app.error"));
 const category_model_1 = __importDefault(require("../category/category.model"));
 const product_model_1 = __importDefault(require("./product.model"));
+const cloudinary_util_1 = require("../../utils/cloudinary.util");
 const createProduct = (productData) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield (0, mongoose_1.startSession)();
     try {
@@ -27,6 +28,7 @@ const createProduct = (productData) => __awaiter(void 0, void 0, void 0, functio
         if (conflicted.length > 0) {
             throw new app_error_1.default(http_status_codes_1.StatusCodes.CONFLICT, "Product already exists");
         }
+        const uploadResult = (yield (0, cloudinary_util_1.sendImageToCloudinary)(`products/${name}`, image));
         const product = yield product_model_1.default.create([
             {
                 name,
@@ -34,7 +36,7 @@ const createProduct = (productData) => __awaiter(void 0, void 0, void 0, functio
                 price,
                 stock,
                 categories,
-                image,
+                image: uploadResult.secure_url,
             },
         ], { session });
         yield category_model_1.default.updateMany({ _id: { $in: categories } }, { $push: { products: product[0]._id } }, { session });

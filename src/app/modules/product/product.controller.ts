@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ProductServices } from "./product.service";
 import AppError from "../../errors/app.error";
+import { ProductServices } from "./product.service";
 
 const createProduct = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -12,7 +12,13 @@ const createProduct = async (req: Request, res: Response): Promise<void> => {
     }
 
     const body = req.body;
-    const product = await ProductServices.createProduct({ ...body, image });
+
+    const product = await ProductServices.createProduct({
+      ...body,
+      price: parseFloat(body.price),
+      stock: parseInt(body.stock),
+      image,
+    });
 
     res.status(StatusCodes.CREATED).json({
       message: "Product created successfully",

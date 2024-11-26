@@ -8,14 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductControllers = void 0;
 const http_status_codes_1 = require("http-status-codes");
+const app_error_1 = __importDefault(require("../../errors/app.error"));
 const product_service_1 = require("./product.service");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const productData = req.body;
-        const product = yield product_service_1.ProductServices.createProduct(productData);
+        const image = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
+        if (!image) {
+            throw new app_error_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Image is required");
+        }
+        const body = req.body;
+        const product = yield product_service_1.ProductServices.createProduct(Object.assign(Object.assign({}, body), { price: parseFloat(body.price), stock: parseInt(body.stock), image }));
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: "Product created successfully",
             product,

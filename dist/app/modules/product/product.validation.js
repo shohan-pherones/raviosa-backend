@@ -11,30 +11,67 @@ const createProductSchema = zod_1.z.object({
     description: zod_1.z
         .string()
         .min(1, { message: "Product description is required." }),
-    image: zod_1.z.string().url({ message: "Invalid image url." }),
-    price: zod_1.z.number().positive({ message: "Price must be a positive number." }),
+    price: zod_1.z
+        .string()
+        .refine((val) => !isNaN(parseFloat(val)), {
+        message: "Price must be a valid number.",
+    })
+        .transform((val) => parseFloat(val))
+        .refine((val) => val > 0, { message: "Price must be a positive number." }),
     stock: zod_1.z
-        .number()
-        .int()
-        .nonnegative({ message: "Stock must be a non-negative integer." }),
+        .string()
+        .refine((val) => !isNaN(parseInt(val, 10)), {
+        message: "Stock must be a valid number.",
+    })
+        .transform((val) => parseInt(val, 10))
+        .refine((val) => Number.isInteger(val), {
+        message: "Stock must be an integer.",
+    })
+        .refine((val) => val >= 0, {
+        message: "Stock must be a non-negative integer.",
+    }),
     categories: zod_1.z.array(zod_1.z.string().refine((id) => mongoose_1.default.Types.ObjectId.isValid(id), {
         message: "Invalid category ID format",
     })),
-    createdAt: zod_1.z.date().optional(),
-    updatedAt: zod_1.z.date().optional(),
 });
 const updateProductSchema = zod_1.z
     .object({
-    name: zod_1.z.string().min(1).optional(),
-    description: zod_1.z.string().min(1).optional(),
-    image: zod_1.z.string().url().optional(),
-    price: zod_1.z.number().positive().optional(),
-    stock: zod_1.z.number().int().nonnegative().optional(),
-    categories: zod_1.z.array(zod_1.z.string().refine((id) => mongoose_1.default.Types.ObjectId.isValid(id), {
+    name: zod_1.z
+        .string()
+        .min(1, { message: "Product name is required." })
+        .optional(),
+    description: zod_1.z
+        .string()
+        .min(1, { message: "Product description is required." })
+        .optional(),
+    price: zod_1.z
+        .string()
+        .refine((val) => !isNaN(parseFloat(val)), {
+        message: "Price must be a valid number.",
+    })
+        .transform((val) => parseFloat(val))
+        .refine((val) => val > 0, {
+        message: "Price must be a positive number.",
+    })
+        .optional(),
+    stock: zod_1.z
+        .string()
+        .refine((val) => !isNaN(parseInt(val, 10)), {
+        message: "Stock must be a valid number.",
+    })
+        .transform((val) => parseInt(val, 10))
+        .refine((val) => Number.isInteger(val), {
+        message: "Stock must be an integer.",
+    })
+        .refine((val) => val >= 0, {
+        message: "Stock must be a non-negative integer.",
+    })
+        .optional(),
+    categories: zod_1.z
+        .array(zod_1.z.string().refine((id) => mongoose_1.default.Types.ObjectId.isValid(id), {
         message: "Invalid category ID format",
-    })),
-    createdAt: zod_1.z.date().optional(),
-    updatedAt: zod_1.z.date().optional(),
+    }))
+        .optional(),
 })
     .partial();
 exports.ProductValidations = {
