@@ -1,11 +1,18 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ProductServices } from "./product.service";
+import AppError from "../../errors/app.error";
 
 const createProduct = async (req: Request, res: Response): Promise<void> => {
   try {
-    const productData = req.body;
-    const product = await ProductServices.createProduct(productData);
+    const image = req.file?.path;
+
+    if (!image) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Image is required");
+    }
+
+    const body = req.body;
+    const product = await ProductServices.createProduct({ ...body, image });
 
     res.status(StatusCodes.CREATED).json({
       message: "Product created successfully",

@@ -4,12 +4,14 @@ import { validate } from "../../middlewares/validation.middleware";
 import { USER_ROLE } from "../user/user.constant";
 import { ProductControllers } from "./product.controller";
 import { ProductValidations } from "./product.validation";
+import { upload } from "../../utils/cloudinary.util";
 
 const router: Router = express.Router();
 
 router.post(
   "/",
   auth(USER_ROLE.admin),
+  upload.single("image"),
   validate(ProductValidations.createProductSchema),
   ProductControllers.createProduct
 );
