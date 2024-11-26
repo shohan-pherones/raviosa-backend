@@ -1,22 +1,23 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/app.error";
+import { uploadImage } from "../../utils/multer.util";
 import { ProductServices } from "./product.service";
 
 const createProduct = async (req: Request, res: Response): Promise<void> => {
   try {
-    const image = req.file?.path;
+    const imageFile = req.file as Express.Multer.File;
 
-    if (!image) {
+    if (!imageFile) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Image is required");
     }
 
-    const body = req.body;
+    const image = await uploadImage(imageFile);
 
     const product = await ProductServices.createProduct({
-      ...body,
-      price: parseFloat(body.price),
-      stock: parseInt(body.stock),
+      ...req.body,
+      price: parseFloat(req.body.price),
+      stock: parseInt(req.body.stock),
       image,
     });
 

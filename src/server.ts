@@ -1,5 +1,6 @@
 import { Server } from "http";
 import app from "./app";
+import { connectCloudinary } from "./app/config/cloudinary";
 import connectDB from "./app/config/db";
 import env from "./app/config/env";
 
@@ -8,6 +9,7 @@ let server: Server;
 async function main() {
   try {
     await connectDB();
+    connectCloudinary();
 
     server = app.listen(env.port, () => {
       console.log(`🚀 Server is listening on port: ${env.port}`);

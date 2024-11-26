@@ -15,16 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductControllers = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_error_1 = __importDefault(require("../../errors/app.error"));
+const multer_util_1 = require("../../utils/multer.util");
 const product_service_1 = require("./product.service");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     try {
-        const image = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
-        if (!image) {
+        const imageFile = req.file;
+        if (!imageFile) {
             throw new app_error_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Image is required");
         }
-        const body = req.body;
-        const product = yield product_service_1.ProductServices.createProduct(Object.assign(Object.assign({}, body), { price: parseFloat(body.price), stock: parseInt(body.stock), image }));
+        const image = yield (0, multer_util_1.uploadImage)(imageFile);
+        const product = yield product_service_1.ProductServices.createProduct(Object.assign(Object.assign({}, req.body), { price: parseFloat(req.body.price), stock: parseInt(req.body.stock), image }));
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: "Product created successfully",
             product,

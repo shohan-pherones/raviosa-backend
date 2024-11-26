@@ -11,9 +11,6 @@ const createProductSchema = zod_1.z.object({
     description: zod_1.z
         .string()
         .min(1, { message: "Product description is required." }),
-    image: zod_1.z.unknown().transform((value) => {
-        return value;
-    }),
     price: zod_1.z
         .string()
         .refine((val) => !isNaN(parseFloat(val)), {
@@ -36,6 +33,12 @@ const createProductSchema = zod_1.z.object({
     categories: zod_1.z.array(zod_1.z.string().refine((id) => mongoose_1.default.Types.ObjectId.isValid(id), {
         message: "Invalid category ID format",
     })),
+    image: zod_1.z
+        .any()
+        .refine((file) => file instanceof File, {
+        message: "Image must be a file.",
+    })
+        .optional(),
 });
 const updateProductSchema = zod_1.z
     .object({
@@ -46,12 +49,6 @@ const updateProductSchema = zod_1.z
     description: zod_1.z
         .string()
         .min(1, { message: "Product description is required." })
-        .optional(),
-    image: zod_1.z
-        .unknown()
-        .transform((value) => {
-        return value;
-    })
         .optional(),
     price: zod_1.z
         .string()
@@ -80,6 +77,12 @@ const updateProductSchema = zod_1.z
         .array(zod_1.z.string().refine((id) => mongoose_1.default.Types.ObjectId.isValid(id), {
         message: "Invalid category ID format",
     }))
+        .optional(),
+    image: zod_1.z
+        .any()
+        .refine((file) => file instanceof File, {
+        message: "Image must be a file.",
+    })
         .optional(),
 })
     .partial();

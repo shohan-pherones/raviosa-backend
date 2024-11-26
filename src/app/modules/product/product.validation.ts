@@ -6,9 +6,6 @@ const createProductSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Product description is required." }),
-  image: z.unknown().transform((value) => {
-    return value as FileList;
-  }),
   price: z
     .string()
     .refine((val) => !isNaN(parseFloat(val)), {
@@ -33,6 +30,12 @@ const createProductSchema = z.object({
       message: "Invalid category ID format",
     })
   ),
+  image: z
+    .any()
+    .refine((file) => file instanceof File, {
+      message: "Image must be a file.",
+    })
+    .optional(),
 });
 
 const updateProductSchema = z
@@ -44,12 +47,6 @@ const updateProductSchema = z
     description: z
       .string()
       .min(1, { message: "Product description is required." })
-      .optional(),
-    image: z
-      .unknown()
-      .transform((value) => {
-        return value as FileList;
-      })
       .optional(),
     price: z
       .string()
@@ -80,6 +77,12 @@ const updateProductSchema = z
           message: "Invalid category ID format",
         })
       )
+      .optional(),
+    image: z
+      .any()
+      .refine((file) => file instanceof File, {
+        message: "Image must be a file.",
+      })
       .optional(),
   })
   .partial();

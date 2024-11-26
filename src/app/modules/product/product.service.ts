@@ -4,10 +4,6 @@ import AppError from "../../errors/app.error";
 import CategoryModel from "../category/category.model";
 import { IProduct } from "./product.interface";
 import ProductModel from "./product.model";
-import {
-  CloudinaryUploadResult,
-  sendImageToCloudinary,
-} from "../../utils/cloudinary.util";
 
 const createProduct = async (productData: IProduct): Promise<IProduct> => {
   const session = await startSession();
@@ -25,11 +21,6 @@ const createProduct = async (productData: IProduct): Promise<IProduct> => {
       throw new AppError(StatusCodes.CONFLICT, "Product already exists");
     }
 
-    const uploadResult = (await sendImageToCloudinary(
-      `products/${name}`,
-      image
-    )) as CloudinaryUploadResult;
-
     const product = await ProductModel.create(
       [
         {
@@ -38,7 +29,7 @@ const createProduct = async (productData: IProduct): Promise<IProduct> => {
           price,
           stock,
           categories,
-          image: uploadResult.secure_url,
+          image,
         },
       ],
       { session }

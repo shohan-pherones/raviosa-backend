@@ -4,7 +4,7 @@ import { validate } from "../../middlewares/validation.middleware";
 import { USER_ROLE } from "../user/user.constant";
 import { ProductControllers } from "./product.controller";
 import { ProductValidations } from "./product.validation";
-import { upload } from "../../utils/cloudinary.util";
+import { upload } from "../../utils/multer.util";
 
 const router: Router = express.Router();
 

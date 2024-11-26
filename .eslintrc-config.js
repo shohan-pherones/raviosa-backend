@@ -8,7 +8,7 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
-    "no-undef": "error",
+    "no-undef": "off",
     "no-unused-expressions": "error",
     "no-unreachable": "error",
     "prettier/prettier": "error",

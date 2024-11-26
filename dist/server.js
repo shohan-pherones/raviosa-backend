@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
+const cloudinary_1 = require("./app/config/cloudinary");
 const db_1 = __importDefault(require("./app/config/db"));
 const env_1 = __importDefault(require("./app/config/env"));
 let server;
@@ -20,6 +21,7 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield (0, db_1.default)();
+            (0, cloudinary_1.connectCloudinary)();
             server = app_1.default.listen(env_1.default.port, () => {
                 console.log(`🚀 Server is listening on port: ${env_1.default.port}`);
             });
