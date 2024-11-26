@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import multer from "multer";
+import path from "path";
 import env from "../config/env";
 
 export interface CloudinaryUploadResult {
@@ -41,7 +42,20 @@ export const sendImageToCloudinary = (imageName: string, path: string) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, process.cwd() + "/uploads/");
+    const uploadPath = path.join(process.cwd(), "uploads");
+
+    fs.access(uploadPath, fs.constants.F_OK, (err) => {
+      if (err) {
+        fs.mkdir(uploadPath, { recursive: true }, (mkdirErr) => {
+          if (mkdirErr) {
+            return cb(mkdirErr, uploadPath);
+          }
+          cb(null, uploadPath);
+        });
+      } else {
+        cb(null, uploadPath);
+      }
+    });
   },
 
   filename: function (req, file, cb) {
