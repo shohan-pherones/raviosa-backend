@@ -6,6 +6,9 @@ const createProductSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Product description is required." }),
+  image: z.unknown().transform((value) => {
+    return value as FileList;
+  }),
   price: z
     .string()
     .refine((val) => !isNaN(parseFloat(val)), {
@@ -41,6 +44,12 @@ const updateProductSchema = z
     description: z
       .string()
       .min(1, { message: "Product description is required." })
+      .optional(),
+    image: z
+      .unknown()
+      .transform((value) => {
+        return value as FileList;
+      })
       .optional(),
     price: z
       .string()
