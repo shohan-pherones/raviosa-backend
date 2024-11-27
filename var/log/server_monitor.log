@@ -1,0 +1,36 @@
+2024-11-27T12:00:01Z: Starting Server Monitoring System
+2024-11-27T12:00:11Z: Syscall logged: open
+2024-11-27T12:00:11Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:00:11Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:00:21Z: Syscall logged: open
+2024-11-27T12:00:21Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:00:21Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:00:31Z: Syscall logged: open
+2024-11-27T12:00:31Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:00:31Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:00:41Z: Syscall logged: open
+2024-11-27T12:00:41Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:00:41Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:00:51Z: Syscall logged: open
+2024-11-27T12:00:51Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:00:51Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:01:01Z: Syscall logged: open
+2024-11-27T12:01:01Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:01:01Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:01:11Z: System integrity snapshot at 2024-11-27T12:01:11Z
+2024-11-27T12:01:21Z: Syscall logged: open
+2024-11-27T12:01:21Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:01:21Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:01:31Z: Syscall logged: open
+2024-11-27T12:01:31Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:01:31Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:01:41Z: Syscall logged: open
+2024-11-27T12:01:41Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:01:41Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:01:51Z: Syscall logged: open
+2024-11-27T12:01:51Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:01:51Z: Rootkit detection scan started with signature malicious_signature_1
+2024-11-27T12:02:01Z: System integrity snapshot at 2024-11-27T12:02:01Z
+2024-11-27T12:02:11Z: Syscall logged: open
+2024-11-27T12:02:11Z: Kernel module integrity check passed for module ext4
+2024-11-27T12:02:11Z: Rootkit detection scan started with signature malicious_signature_1
