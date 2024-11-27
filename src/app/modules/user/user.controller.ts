@@ -2,12 +2,22 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/app.error";
 import { UserServices } from "./user.service";
+import { uploadImage } from "../../utils/multer.util";
 
 const register = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { accessToken, refreshToken, user } = await UserServices.register(
-      req.body
-    );
+    const imageFile = req.file as Express.Multer.File;
+
+    if (!imageFile) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Image is required");
+    }
+
+    const image = await uploadImage(imageFile);
+
+    const { accessToken, refreshToken, user } = await UserServices.register({
+      ...req.body,
+      image,
+    });
 
     res.status(StatusCodes.CREATED).json({
       message: "User registered successfully",

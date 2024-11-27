@@ -4,6 +4,7 @@ import { validate } from "../../middlewares/validation.middleware";
 import { USER_ROLE } from "./user.constant";
 import { UserControllers } from "./user.controller";
 import { UserValidations } from "./user.validation";
+import { upload } from "../../utils/multer.util";
 
 const router: Router = express.Router();
 
@@ -24,6 +25,7 @@ router.put(
 
 router.post(
   "/auth/register",
+  upload.single("image"),
   validate(UserValidations.registerSchema),
   UserControllers.register
 );

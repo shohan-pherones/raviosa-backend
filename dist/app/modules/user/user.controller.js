@@ -16,9 +16,15 @@ exports.UserControllers = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_error_1 = __importDefault(require("../../errors/app.error"));
 const user_service_1 = require("./user.service");
+const multer_util_1 = require("../../utils/multer.util");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { accessToken, refreshToken, user } = yield user_service_1.UserServices.register(req.body);
+        const imageFile = req.file;
+        if (!imageFile) {
+            throw new app_error_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Image is required");
+        }
+        const image = yield (0, multer_util_1.uploadImage)(imageFile);
+        const { accessToken, refreshToken, user } = yield user_service_1.UserServices.register(Object.assign(Object.assign({}, req.body), { image }));
         res.status(http_status_codes_1.StatusCodes.CREATED).json({
             message: "User registered successfully",
             accessToken,
