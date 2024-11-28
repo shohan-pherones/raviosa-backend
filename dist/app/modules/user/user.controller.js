@@ -98,16 +98,18 @@ const updateAnUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         if (userId !== loggedInUserId) {
             throw new app_error_1.default(http_status_codes_1.StatusCodes.UNAUTHORIZED, "You are not authorized to update this user");
         }
-        const { username, name, image, address } = req.body;
-        const updatedUser = yield user_service_1.UserServices.updateAnUser(userId, {
-            username,
-            name,
-            image,
-            address,
-        });
+        let updatedData = Object.assign({}, req.body);
+        const imageFile = req.file;
+        if (imageFile) {
+            const image = yield (0, multer_util_1.uploadImage)(imageFile);
+            updatedData = Object.assign(Object.assign({}, updatedData), { image });
+        }
+        const { accessToken, refreshToken, user } = yield user_service_1.UserServices.updateAnUser(userId, updatedData);
         res.status(http_status_codes_1.StatusCodes.OK).json({
             message: "User updated successfully",
-            updatedUser,
+            accessToken,
+            refreshToken,
+            user,
         });
     }
     catch (error) {

@@ -69,12 +69,19 @@ const updateUserSchema = z
       .regex(/^[a-zA-Z0-9_]+$/, {
         message:
           "Username should only contain letters, numbers, and underscores.",
-      }),
-    name: z.string().min(1, { message: "Name is required." }),
-    image: z.string().url({ message: "Invalid image URL format." }),
+      })
+      .optional(),
+    name: z.string().min(1, { message: "Name is required." }).optional(),
+    image: z
+      .any()
+      .refine((file) => file instanceof File, {
+        message: "Image must be a file.",
+      })
+      .optional(),
     address: z
       .string()
-      .min(5, { message: "Address must be at least 5 characters long." }),
+      .min(5, { message: "Address must be at least 5 characters long." })
+      .optional(),
   })
   .partial();
 

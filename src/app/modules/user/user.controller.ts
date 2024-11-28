@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/app.error";
 import { UserServices } from "./user.service";
 import { uploadImage } from "../../utils/multer.util";
+import { IUser } from "./user.interface";
 
 const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -104,18 +105,24 @@ const updateAnUser = async (req: Request, res: Response): Promise<void> => {
       );
     }
 
-    const { username, name, image, address } = req.body;
+    let updatedData = { ...req.body };
+    const imageFile = req.file as Express.Multer.File;
 
-    const updatedUser = await UserServices.updateAnUser(userId, {
-      username,
-      name,
-      image,
-      address,
-    });
+    if (imageFile) {
+      const image = await uploadImage(imageFile);
+      updatedData = { ...updatedData, image };
+    }
+
+    const { accessToken, refreshToken, user } = await UserServices.updateAnUser(
+      userId,
+      updatedData
+    );
 
     res.status(StatusCodes.OK).json({
       message: "User updated successfully",
-      updatedUser,
+      accessToken,
+      refreshToken,
+      user,
     });
   } catch (error: any) {
     res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });

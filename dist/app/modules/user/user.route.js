@@ -13,7 +13,7 @@ const multer_util_1 = require("../../utils/multer.util");
 const router = express_1.default.Router();
 router.get("/", (0, auth_middleware_1.default)(user_constant_1.USER_ROLE.admin), user_controller_1.UserControllers.getAllUsers);
 router.get("/:userId", (0, auth_middleware_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), user_controller_1.UserControllers.getAnUser);
-router.put("/:userId", (0, auth_middleware_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), (0, validation_middleware_1.validate)(user_validation_1.UserValidations.updateUserSchema), user_controller_1.UserControllers.updateAnUser);
+router.put("/:userId", (0, auth_middleware_1.default)(user_constant_1.USER_ROLE.user, user_constant_1.USER_ROLE.admin), multer_util_1.upload.single("image"), (0, validation_middleware_1.validate)(user_validation_1.UserValidations.updateUserSchema), user_controller_1.UserControllers.updateAnUser);
 router.post("/auth/register", multer_util_1.upload.single("image"), (0, validation_middleware_1.validate)(user_validation_1.UserValidations.registerSchema), user_controller_1.UserControllers.register);
 router.post("/auth/login", (0, validation_middleware_1.validate)(user_validation_1.UserValidations.loginSchema), user_controller_1.UserControllers.login);
 router.get("/auth/token/refresh", (0, validation_middleware_1.validate)(user_validation_1.UserValidations.refreshTokenSchema), user_controller_1.UserControllers.refreshToken);
