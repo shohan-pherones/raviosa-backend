@@ -170,6 +170,20 @@ const updateAnUser = async (userId: string, userData: Partial<IUser>) => {
   return { accessToken, refreshToken, user };
 };
 
+const changeUserRole = async (userId: string, role: string) => {
+  const user = await UserModel.findByIdAndUpdate(
+    userId,
+    { $set: { role } },
+    { new: true }
+  );
+
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, "User not found");
+  }
+
+  return user;
+};
+
 export const UserServices = {
   register,
   login,
@@ -177,4 +191,5 @@ export const UserServices = {
   getAllUsers,
   getAnUser,
   updateAnUser,
+  changeUserRole,
 };

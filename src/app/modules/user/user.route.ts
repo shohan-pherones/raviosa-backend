@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import auth from "../../middlewares/auth.middleware";
 import { validate } from "../../middlewares/validation.middleware";
+import { upload } from "../../utils/multer.util";
 import { USER_ROLE } from "./user.constant";
 import { UserControllers } from "./user.controller";
 import { UserValidations } from "./user.validation";
-import { upload } from "../../utils/multer.util";
 
 const router: Router = express.Router();
 
@@ -22,6 +22,13 @@ router.put(
   upload.single("image"),
   validate(UserValidations.updateUserSchema),
   UserControllers.updateAnUser
+);
+
+router.put(
+  "/change-role/:userId",
+  auth(USER_ROLE.admin),
+  validate(UserValidations.updateUserRoleSchema),
+  UserControllers.changeUserRole
 );
 
 router.post(

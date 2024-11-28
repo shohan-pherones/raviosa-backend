@@ -116,6 +116,20 @@ const updateAnUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: error.message });
     }
 });
+const changeUserRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId } = req.params;
+        const { role } = req.body;
+        const user = yield user_service_1.UserServices.changeUserRole(userId, role);
+        res.status(http_status_codes_1.StatusCodes.OK).json({
+            message: "User role updated successfully",
+            user,
+        });
+    }
+    catch (error) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: error.message });
+    }
+});
 exports.UserControllers = {
     register,
     login,
@@ -123,4 +137,5 @@ exports.UserControllers = {
     getAllUsers,
     getAnUser,
     updateAnUser,
+    changeUserRole,
 };

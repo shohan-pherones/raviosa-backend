@@ -103,6 +103,13 @@ const updateAnUser = (userId, userData) => __awaiter(void 0, void 0, void 0, fun
     const refreshToken = (0, jwt_util_1.createToken)(jwtPayload, env_1.default.jwt_refresh_secret, env_1.default.jwt_refresh_expires_in);
     return { accessToken, refreshToken, user };
 });
+const changeUserRole = (userId, role) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.default.findByIdAndUpdate(userId, { $set: { role } }, { new: true });
+    if (!user) {
+        throw new app_error_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "User not found");
+    }
+    return user;
+});
 exports.UserServices = {
     register,
     login,
@@ -110,4 +117,5 @@ exports.UserServices = {
     getAllUsers,
     getAnUser,
     updateAnUser,
+    changeUserRole,
 };

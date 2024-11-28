@@ -79,9 +79,16 @@ const updateUserSchema = zod_1.z
         .optional(),
 })
     .partial();
+const updateUserRoleSchema = zod_1.z.object({
+    role: zod_1.z.enum(["user", "admin"], {
+        required_error: "Role is required",
+        invalid_type_error: "Role must be either 'user' or 'admin'",
+    }),
+});
 exports.UserValidations = {
     registerSchema,
     loginSchema,
     refreshTokenSchema,
     updateUserSchema,
+    updateUserRoleSchema,
 };
