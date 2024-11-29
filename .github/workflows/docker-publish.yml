@@ -56,7 +56,7 @@ jobs:
       - name: Tag Docker image
         run: |
           IMAGE_NAME=spectrashohan/raviosa-api
-          docker tag api:latest $IMAGE_NAME:v${{ env.NEW_VERSION }}
+          docker tag raviosa-api:latest $IMAGE_NAME:v${{ env.NEW_VERSION }}
 
       - name: Push Docker image to DockerHub
         run: |
