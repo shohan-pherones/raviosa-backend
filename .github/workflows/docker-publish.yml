@@ -23,6 +23,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
       - name: Extract the current version
         id: extract_version
         run: |
@@ -33,17 +39,16 @@ jobs:
             VERSION="1.0.0"
           fi
           echo "Current version: $VERSION"
-          echo "::set-output name=version::$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Increment patch version
         id: increment_version
         run: |
-          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.extract_version.outputs.version }}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
           PATCH=$((PATCH + 1))
           NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
           echo "New version: $NEW_VERSION"
-          echo $NEW_VERSION > VERSION
-          echo "::set-output name=new_version::$NEW_VERSION"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: docker-compose build
@@ -51,17 +56,17 @@ jobs:
       - name: Tag Docker image
         run: |
           IMAGE_NAME=spectrashohan/raviosa-api
-          docker tag api:latest $IMAGE_NAME:v${{ steps.increment_version.outputs.new_version }}
+          docker tag api:latest $IMAGE_NAME:v${{ env.NEW_VERSION }}
 
       - name: Push Docker image to DockerHub
         run: |
           IMAGE_NAME=spectrashohan/raviosa-api
-          docker push $IMAGE_NAME:v${{ steps.increment_version.outputs.new_version }}
+          docker push $IMAGE_NAME:v${{ env.NEW_VERSION }}
 
       - name: Commit new version to repo
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add VERSION
-          git commit -m "Bump version to ${{ steps.increment_version.outputs.new_version }}"
+          git commit -m "Bump version to ${{ env.NEW_VERSION }}"
           git push
