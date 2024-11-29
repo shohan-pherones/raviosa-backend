@@ -13,14 +13,6 @@ const createProduct = async (productData: IProduct): Promise<IProduct> => {
 
     const { name, description, price, stock, categories, image } = productData;
 
-    const conflicted = (await getAllProducts()).filter(
-      (prod) => prod.name === name
-    );
-
-    if (conflicted.length > 0) {
-      throw new AppError(StatusCodes.CONFLICT, "Product already exists");
-    }
-
     const product = await ProductModel.create(
       [
         {
@@ -75,20 +67,12 @@ const updateProduct = async (
   try {
     session.startTransaction();
 
-    const { name, description, price, stock, categories, image } = updateData;
-
-    const conflicted = (await getAllProducts()).filter(
-      (prod) => prod.name === name
-    );
-
-    if (conflicted.length > 0) {
-      throw new AppError(StatusCodes.CONFLICT, "Product already exists");
-    }
+    const { name, description, price, stock } = updateData;
 
     const updatedProduct = await ProductModel.findByIdAndUpdate(
       productId,
       {
-        $set: { name, description, price, stock, categories, image },
+        $set: { name, description, price, stock },
       },
       { new: true, session }
     ).populate("categories");

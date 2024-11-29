@@ -62,8 +62,7 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { productId } = req.params;
-        const updateData = req.body;
-        const product = yield product_service_1.ProductServices.updateProduct(productId, updateData);
+        const product = yield product_service_1.ProductServices.updateProduct(productId, req.body);
         res.status(http_status_codes_1.StatusCodes.OK).json({
             message: "Product updated successfully",
             product,

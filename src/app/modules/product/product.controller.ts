@@ -60,9 +60,8 @@ const getAllProducts = async (req: Request, res: Response): Promise<void> => {
 const updateProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     const { productId } = req.params;
-    const updateData = req.body;
 
-    const product = await ProductServices.updateProduct(productId, updateData);
+    const product = await ProductServices.updateProduct(productId, req.body);
 
     res.status(StatusCodes.OK).json({
       message: "Product updated successfully",

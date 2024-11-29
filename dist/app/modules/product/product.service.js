@@ -23,10 +23,6 @@ const createProduct = (productData) => __awaiter(void 0, void 0, void 0, functio
     try {
         session.startTransaction();
         const { name, description, price, stock, categories, image } = productData;
-        const conflicted = (yield getAllProducts()).filter((prod) => prod.name === name);
-        if (conflicted.length > 0) {
-            throw new app_error_1.default(http_status_codes_1.StatusCodes.CONFLICT, "Product already exists");
-        }
         const product = yield product_model_1.default.create([
             {
                 name,
@@ -64,13 +60,9 @@ const updateProduct = (productId, updateData) => __awaiter(void 0, void 0, void 
     const session = yield (0, mongoose_1.startSession)();
     try {
         session.startTransaction();
-        const { name, description, price, stock, categories, image } = updateData;
-        const conflicted = (yield getAllProducts()).filter((prod) => prod.name === name);
-        if (conflicted.length > 0) {
-            throw new app_error_1.default(http_status_codes_1.StatusCodes.CONFLICT, "Product already exists");
-        }
+        const { name, description, price, stock } = updateData;
         const updatedProduct = yield product_model_1.default.findByIdAndUpdate(productId, {
-            $set: { name, description, price, stock, categories, image },
+            $set: { name, description, price, stock },
         }, { new: true, session }).populate("categories");
         if (!updatedProduct) {
             throw new app_error_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Product not found");
