@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
-import { USER_ROLE } from "./user.constant";
 import { IOrder } from "../order/order.interface";
+import { USER_ROLE } from "./user.constant";
 
 export interface IUser {
   _id: ObjectId;

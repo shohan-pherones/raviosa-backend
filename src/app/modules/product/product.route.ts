@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 import auth from "../../middlewares/auth.middleware";
 import { validate } from "../../middlewares/validation.middleware";
+import { upload } from "../../utils/multer.util";
 import { USER_ROLE } from "../user/user.constant";
 import { ProductControllers } from "./product.controller";
 import { ProductValidations } from "./product.validation";
-import { upload } from "../../utils/multer.util";
 
 const router: Router = express.Router();
 

@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserControllers = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const app_error_1 = __importDefault(require("../../errors/app.error"));
-const user_service_1 = require("./user.service");
 const multer_util_1 = require("../../utils/multer.util");
+const user_service_1 = require("./user.service");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const imageFile = req.file;

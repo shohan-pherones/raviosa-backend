@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/app.error";
-import { UserServices } from "./user.service";
 import { uploadImage } from "../../utils/multer.util";
-import { IUser } from "./user.interface";
+import { UserServices } from "./user.service";
 
 const register = async (req: Request, res: Response): Promise<void> => {
   try {
