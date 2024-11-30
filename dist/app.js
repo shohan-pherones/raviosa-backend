@@ -9,12 +9,13 @@ const express_1 = __importDefault(require("express"));
 const helmet_1 = __importDefault(require("helmet"));
 const http_status_codes_1 = require("http-status-codes");
 const morgan_1 = __importDefault(require("morgan"));
+const env_1 = __importDefault(require("./app/config/env"));
 const global_error_1 = __importDefault(require("./app/errors/global.error"));
 const not_found_error_1 = __importDefault(require("./app/errors/not-found.error"));
 const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: "https://raviosa-frontend.vercel.app",
+    origin: env_1.default.frontend_url,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
