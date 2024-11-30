@@ -16,9 +16,11 @@ exports.OrderServices = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const mongoose_1 = require("mongoose");
 const app_error_1 = __importDefault(require("../../errors/app.error"));
+const nodemailer_util_1 = require("../../utils/nodemailer.util");
 const product_model_1 = __importDefault(require("../product/product.model"));
 const user_model_1 = __importDefault(require("../user/user.model"));
 const order_model_1 = __importDefault(require("./order.model"));
+const order_template_1 = require("./order.template");
 const ordered_item_model_1 = __importDefault(require("./ordered-item.model"));
 const createOrder = (orderData) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield (0, mongoose_1.startSession)();
@@ -90,6 +92,7 @@ const getAllOrders = () => __awaiter(void 0, void 0, void 0, function* () {
     return orders;
 });
 const confirmOrder = (confirmOrderData, orderId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f;
     const session = yield (0, mongoose_1.startSession)();
     try {
         session.startTransaction();
@@ -144,6 +147,8 @@ const confirmOrder = (confirmOrderData, orderId) => __awaiter(void 0, void 0, vo
         if (!updatedOrder) {
             throw new app_error_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, `Order with ID ${orderId} not found`);
         }
+        const template = (0, order_template_1.getOrderConfirmTemplate)((_a = updatedOrder.shippingDetails) === null || _a === void 0 ? void 0 : _a.name, String(order._id).slice(17, -1).toUpperCase(), (_b = updatedOrder.shippingDetails) === null || _b === void 0 ? void 0 : _b.email, (_c = updatedOrder.shippingDetails) === null || _c === void 0 ? void 0 : _c.phone, (_d = updatedOrder.shippingDetails) === null || _d === void 0 ? void 0 : _d.address, order.totalPrice, (_e = updatedOrder.shippingDetails) === null || _e === void 0 ? void 0 : _e.paymentMethod, String(order._id));
+        (0, nodemailer_util_1.sendEmail)((_f = updatedOrder.shippingDetails) === null || _f === void 0 ? void 0 : _f.email, "🎉 Order Confirmed! Your Raviosa Beauty Essentials Are On Their Way!", template);
         yield session.commitTransaction();
         return (yield updatedOrder.populate(["items", "user"])).toObject();
     }

@@ -1,10 +1,12 @@
 import { StatusCodes } from "http-status-codes";
 import { startSession } from "mongoose";
 import AppError from "../../errors/app.error";
+import { sendEmail } from "../../utils/nodemailer.util";
 import ProductModel from "../product/product.model";
 import UserModel from "../user/user.model";
 import { IConfirmOrderData, IOrder, IOrderedItems } from "./order.interface";
 import OrderModel from "./order.model";
+import { getOrderConfirmTemplate } from "./order.template";
 import OrderedItemsModel from "./ordered-item.model";
 
 const createOrder = async (orderData: IOrder): Promise<IOrder> => {
@@ -200,6 +202,23 @@ const confirmOrder = async (
         `Order with ID ${orderId} not found`
       );
     }
+
+    const template = getOrderConfirmTemplate(
+      updatedOrder.shippingDetails?.name as string,
+      String(order._id).slice(17, -1).toUpperCase(),
+      updatedOrder.shippingDetails?.email as string,
+      updatedOrder.shippingDetails?.phone as string,
+      updatedOrder.shippingDetails?.address as string,
+      order.totalPrice,
+      updatedOrder.shippingDetails?.paymentMethod as string,
+      String(order._id)
+    );
+
+    sendEmail(
+      updatedOrder.shippingDetails?.email as string,
+      "🎉 Order Confirmed! Your Raviosa Beauty Essentials Are On Their Way!",
+      template
+    );
 
     await session.commitTransaction();
     return (await updatedOrder.populate(["items", "user"])).toObject();
