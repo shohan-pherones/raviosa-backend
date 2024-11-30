@@ -102,8 +102,9 @@ To run this project, add the following environment variables to their respective
 
 ## Deployments
 
-- **Cloudflare Pages**: <https://raviosa-frontend.pages.dev>
-- **Vercel**: <https://raviosa-frontend.vercel.app>
+- **Front-End**: <https://raviosa-frontend.vercel.app>
+- **Back-End**: <https://raviosa-backend.vercel.app>
+- **Docker Image**: <https://hub.docker.com/r/spectrashohan/raviosa-api>
 
 ## Feedback
 
