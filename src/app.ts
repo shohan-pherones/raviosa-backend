@@ -13,7 +13,7 @@ const app: Application = express();
 
 app.use(
   cors({
-    origin: env.frontend_url,
+    origin: "https://raviosa-frontend.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
