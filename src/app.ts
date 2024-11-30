@@ -4,6 +4,7 @@ import express, { Application, Request, Response } from "express";
 import helmet from "helmet";
 import { StatusCodes } from "http-status-codes";
 import morgan from "morgan";
+import env from "./app/config/env";
 import globalErrorHandler from "./app/errors/global.error";
 import notFoundHandler from "./app/errors/not-found.error";
 import router from "./app/routes";
@@ -14,11 +15,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://raviosa-frontend.vercel.app",
-      "https://raviosa-frontend.pages.dev",
-    ],
+    origin: env.frontend_url,
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
