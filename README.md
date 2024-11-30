@@ -96,6 +96,12 @@ To run this project, add the following environment variables to their respective
 
 `CLOUDINARY_API_SECRET`
 
+`SMTP_USER`
+
+`SMTP_PASS`
+
+`FRONTEND_URL`
+
 ### Frontend
 
 `NEXT_PUBLIC_API_BASE_URL`

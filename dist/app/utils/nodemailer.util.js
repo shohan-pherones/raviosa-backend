@@ -17,9 +17,10 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const env_1 = __importDefault(require("../config/env"));
 const sendEmail = (to, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
-        host: env_1.default.smtp_host,
+        service: "gmail",
+        host: "smtp.gmail.com",
         port: 587,
-        secure: env_1.default.node_env === "production",
+        secure: false,
         auth: {
             user: env_1.default.smtp_user,
             pass: env_1.default.smtp_pass,

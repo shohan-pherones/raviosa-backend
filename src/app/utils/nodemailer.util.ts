@@ -3,9 +3,10 @@ import env from "../config/env";
 
 export const sendEmail = async (to: string, subject: string, html: string) => {
   const transporter = nodemailer.createTransport({
-    host: env.smtp_host,
+    service: "gmail",
+    host: "smtp.gmail.com",
     port: 587,
-    secure: env.node_env === "production",
+    secure: false,
     auth: {
       user: env.smtp_user,
       pass: env.smtp_pass,
