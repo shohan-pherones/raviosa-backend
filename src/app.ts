@@ -11,8 +11,6 @@ import router from "./app/routes";
 
 const app: Application = express();
 
-app.use(express.json());
-app.use(cookieParser());
 app.use(
   cors({
     origin: env.frontend_url,
@@ -20,6 +18,8 @@ app.use(
     credentials: true,
   })
 );
+app.use(cookieParser());
+app.use(express.json());
 app.use(helmet());
 app.use(morgan("short"));
 

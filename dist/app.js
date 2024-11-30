@@ -14,13 +14,13 @@ const global_error_1 = __importDefault(require("./app/errors/global.error"));
 const not_found_error_1 = __importDefault(require("./app/errors/not-found.error"));
 const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
-app.use(express_1.default.json());
-app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     origin: env_1.default.frontend_url,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
+app.use((0, cookie_parser_1.default)());
+app.use(express_1.default.json());
 app.use((0, helmet_1.default)());
 app.use((0, morgan_1.default)("short"));
 app.use("/api/v1", routes_1.default);
